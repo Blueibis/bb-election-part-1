@@ -4,15 +4,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function submitVote(e) {
       e.preventDefault();
+
       var idVal = $(this).children('input[type=hidden]').val()
-      console.log(idVal);
+
       $.ajax({
         url: 'https://bb-election-api.herokuapp.com/vote?id=' + idVal,
         method: 'POST',
         // data: { id: $(this).children('input[type=hidden]').val() },
         dataType: 'json'
       }).done(function(response) {
-        console.log('done!');
+        document.querySelector('input[value="' + idVal + '"]').nextSibling.disabled = true
+        document.querySelector('input[value="' + idVal + '"]').parentElement.parentElement.innerHTML
+        // this.lastChild.disabled = true
+        // $(this).children('input[type=submit]').prop('disabled', true)
+        // this.prop('disabled', true)
       }).fail(function() {
         console.log('air roar');
       });
@@ -41,8 +46,9 @@ document.addEventListener("DOMContentLoaded", function() {
       voteForm.append(voteButton)
 
       voter.innerHTML = '<b>Name: ' + voterInfo.name + '</b><br>Votes: ' + voterInfo.votes
+      voter.append(voteForm)
       list.append(voter)
-      list.append(voteForm)
+      // list.append(voteForm)
 
       var forms = document.querySelectorAll('.vote-form')
       for(var i = 0; i < forms.length; i++) {
